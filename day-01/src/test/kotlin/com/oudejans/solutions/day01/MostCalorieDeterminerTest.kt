@@ -75,4 +75,14 @@ class MostCalorieDeterminerTest {
         assertThat(output).isEqualTo(45000)
     }
 
+    @Test
+    fun `should be able to give the second answer`(){
+        // Given
+        val input = QuestionInputDownloader().getInput(1)
+        // When
+        val output = subject.determineThreeHighestCalories(input)
+        // Then
+        println("Second answer: $output")
+    }
+
 }
