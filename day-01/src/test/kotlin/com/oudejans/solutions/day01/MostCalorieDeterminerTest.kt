@@ -50,4 +50,29 @@ class MostCalorieDeterminerTest {
         println("First answer: $output")
     }
 
+    @Test
+    fun `should also be able to determine the sum of the three highest calorie counts`(){
+        // Given
+        val input = """
+            1000
+            2000
+            3000
+
+            4000
+
+            5000
+            6000
+
+            7000
+            8000
+            9000
+
+            10000
+        """.trimIndent()
+        // When
+        val output = subject.determineThreeHighestCalories(input)
+        // Then
+        assertThat(output).isEqualTo(45000)
+    }
+
 }

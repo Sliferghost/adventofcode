@@ -9,6 +9,14 @@ class MostCalorieDeterminer {
         return summedByElf.max()
     }
 
+    fun determineThreeHighestCalories(input: String): Int {
+        val inputByElf = splitInputByElf(input)
+        val convertedToNumbers = convertToNumbers(inputByElf)
+        val summedByElf = sumCaloriesByElf(convertedToNumbers)
+        val highestThree = highestCalorieCount(summedByElf, 3)
+        return highestThree.sum()
+    }
+
     private fun splitInputByElf(input: String): List<List<String>> =
         input.split("\n\n").map { allCaloriesPerElf -> allCaloriesPerElf.split("\n") }
 
@@ -17,4 +25,9 @@ class MostCalorieDeterminer {
 
     private fun sumCaloriesByElf(convertedToNumbers: List<List<Int>>): List<Int> =
         convertedToNumbers.map { allCaloriesPerElf -> allCaloriesPerElf.sum() }
+
+    private fun highestCalorieCount(summedByElf: List<Int>, highest: Int): List<Int> {
+        val sorted = summedByElf.sortedDescending()
+        return sorted.subList(0, highest)
+    }
 }
