@@ -1,2 +1,4 @@
+
 dependencies {
+    testImplementation(project(":helpers"))
 }
