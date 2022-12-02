@@ -24,7 +24,7 @@ class RockPaperScissorsTest {
             C Z
         """.trimIndent()
         // When
-        val result = subject.playWithStrategy(input)
+        val result = subject.playWithAssumedStrategy(input)
         // Then
         assertThat(result).isEqualTo(15)
     }
@@ -34,7 +34,7 @@ class RockPaperScissorsTest {
         // Given
         val input = QuestionInputDownloader().getInput(2)
         // When
-        val result = subject.playWithStrategy(input)
+        val result = subject.playWithAssumedStrategy(input)
         // Then
         println(result)
     }

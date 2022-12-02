@@ -7,20 +7,20 @@ typealias Score = Int
 
 class RockPaperScissors {
 
-    fun playWithStrategy(strategy: String): Score {
+    fun playWithAssumedStrategy(strategy: String): Score {
         val rounds = getRounds(strategy)
-        val typedRounds = toTypedRounds(rounds)
-        return calculateScore(typedRounds)
+        val assumedStrategyPlays = toAssumedPlays(rounds)
+        return calculateScore(assumedStrategyPlays)
     }
 
     private fun getRounds(strategy: String): List<String> = strategy.split("\n")
 
-    private fun toTypedRounds(rounds: List<String>): List<Round> =
+    private fun toAssumedPlays(rounds: List<String>): List<AssumedPlay> =
         rounds.map { round ->
             val hands = round.split(" ")
-            Round(
-                elfPlays = toHand(hands[0]),
-                iPlay = toHand(hands[1])
+            AssumedPlay(
+                opponentPlays = toHand(hands[0]),
+                iPlay = toHand(hands[1]),
             )
         }
 
@@ -35,9 +35,9 @@ class RockPaperScissors {
             else -> error("Unknown hand: $hand")
         }
 
-    private fun calculateScore(rounds: List<Round>): Int =
-        rounds.sumOf { round ->
-            scoreBasedOnHandIPlay(round.iPlay) + scoreBasedOnOutcome(round.iPlay, round.elfPlays)
+    private fun calculateScore(assumedStrategyPlays: List<AssumedPlay>): Int =
+        assumedStrategyPlays.sumOf { round ->
+            scoreBasedOnHandIPlay(round.iPlay) + scoreBasedOnOutcome(round.iPlay, round.opponentPlays)
         }
 
     private fun scoreBasedOnHandIPlay(hand: Hand) =
@@ -56,15 +56,15 @@ class RockPaperScissors {
 
     fun playWithUpdatedStrategy(input: String): Int {
         val rounds = getRounds(input)
-        val updatedRounds = toTypedUpdatedRounds(rounds)
-        val typedRounds = toRoundsFromUpdatedRounds(updatedRounds)
-        return calculateScore(typedRounds)
+        val actualStrategyPlays = toActualStrategyPlays(rounds)
+        val assumedStrategyPlays = actualPlaysToAssumedPlays(actualStrategyPlays)
+        return calculateScore(assumedStrategyPlays)
     }
 
-    private fun toTypedUpdatedRounds(rounds: List<String>): List<UpdatedRound> =
+    private fun toActualStrategyPlays(rounds: List<String>): List<ActualPlay> =
         rounds.map { round ->
             val input = round.split(" ")
-            UpdatedRound(
+            ActualPlay(
                 elfPlays = toHand(input[0]),
                 winCondition = toWinCondition(input[1])
             )
@@ -78,13 +78,13 @@ class RockPaperScissors {
             else -> error("Unknown condition: $condition")
         }
 
-    private fun toRoundsFromUpdatedRounds(rounds: List<UpdatedRound>): List<Round> =
-        rounds.map { round ->
-            Round(
-                elfPlays = round.elfPlays,
-                iPlay = when (round.winCondition) {
+    private fun actualPlaysToAssumedPlays(actualPlays: List<ActualPlay>): List<AssumedPlay> =
+        actualPlays.map { actualPlay ->
+            AssumedPlay(
+                opponentPlays = actualPlay.elfPlays,
+                iPlay = when (actualPlay.winCondition) {
                     WIN -> {
-                        when (round.elfPlays) {
+                        when (actualPlay.elfPlays) {
                             ROCK -> PAPER
                             PAPER -> SCISSORS
                             SCISSORS -> ROCK
@@ -92,11 +92,11 @@ class RockPaperScissors {
                     }
 
                     DRAW -> {
-                        round.elfPlays
+                        actualPlay.elfPlays
                     }
 
                     else -> {
-                        when (round.elfPlays) {
+                        when (actualPlay.elfPlays) {
                             ROCK -> SCISSORS
                             PAPER -> ROCK
                             SCISSORS -> PAPER
@@ -108,8 +108,8 @@ class RockPaperScissors {
 
 }
 
-data class Round(val elfPlays: Hand, val iPlay: Hand)
-data class UpdatedRound(val elfPlays: Hand, val winCondition: Condition)
+data class AssumedPlay(val iPlay: Hand, val opponentPlays: Hand)
+data class ActualPlay(val elfPlays: Hand, val winCondition: Condition)
 
 enum class Hand {
     ROCK, PAPER, SCISSORS
