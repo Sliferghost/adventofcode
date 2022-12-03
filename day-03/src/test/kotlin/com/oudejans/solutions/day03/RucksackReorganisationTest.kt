@@ -42,4 +42,31 @@ class RucksackReorganisationTest {
         println(result)
     }
 
+    @Test
+    fun `should sum the priority of the badges per group of three elves`() {
+        // Given
+        val input = """
+            vJrwpWtwJgWrhcsFMMfFFhFp
+            jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+            PmmdzqPrVvPwwTWBwg
+            wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+            ttgJtRGJQctTZtZT
+            CrZsJsPPZsGzwwsLwLmpwMDw
+        """.trimIndent()
+        // When
+        val result = subject.reorganizeBadges(input)
+        // Then
+        assertThat(result).isEqualTo(70)
+    }
+
+    @Test
+    fun `should be able to solve second part`() {
+        // Given
+        val input = QuestionInputDownloader().getInput(3)
+        // When
+        val result = subject.reorganizeBadges(input)
+        // Then
+        println(result)
+    }
+
 }
